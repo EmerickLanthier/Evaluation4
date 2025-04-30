@@ -9,8 +9,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import college.ahuntsic.evaluation4.ui.ToDoBar
 import college.ahuntsic.evaluation4.ui.theme.Evaluation4Theme
 
 class MainActivity : ComponentActivity() {
@@ -19,9 +24,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Evaluation4Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
+                Scaffold(
+                    topBar = {
+                    ToDoBar()
+                },
+                    modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    ToDoApp(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -31,17 +39,14 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun ToDoApp(modifier: Modifier = Modifier) {
+
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     Evaluation4Theme {
-        Greeting("Android")
+        ToDoApp()
     }
 }
