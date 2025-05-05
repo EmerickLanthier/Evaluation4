@@ -11,6 +11,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -31,6 +32,7 @@ import college.ahuntsic.evaluation4.R
 @Composable
 fun ToDoBar(
 ) {
+    //CenterAlignedTopAppBar(){}
     Column(
         modifier = Modifier
             .fillMaxWidth()
