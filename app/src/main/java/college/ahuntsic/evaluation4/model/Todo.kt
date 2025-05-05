@@ -13,6 +13,7 @@ data class Todo (
     val dateCreation : LocalDate,
     val name: String,
     val note : String,
+    val priority: Priority,
     val completed : Boolean,
     val endDate : LocalDate
 )
