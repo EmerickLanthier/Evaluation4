@@ -13,9 +13,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import college.ahuntsic.evaluation4.data.Database
 import college.ahuntsic.evaluation4.ui.ToDoBar
+import college.ahuntsic.evaluation4.ui.TodoList
 import college.ahuntsic.evaluation4.ui.theme.Evaluation4Theme
 
 class MainActivity : ComponentActivity() {
@@ -40,7 +43,15 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ToDoApp(modifier: Modifier = Modifier) {
-
+    val todoList = remember { Database.loadTodos().toMutableStateList() }
+//testing it
+    TodoList(todoList, modifier = modifier, { todo ->
+        val index = todoList.indexOf(todo)
+        todoList.removeAt(index)
+    }) { todo, checked ->
+        val index = todoList.indexOf(todo)
+        todoList[index] = todoList[index].copy(completed = checked)
+    }
 }
 
 @Preview(showBackground = true)

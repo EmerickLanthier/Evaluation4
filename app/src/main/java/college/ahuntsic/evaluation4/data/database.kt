@@ -1,7 +1,5 @@
 package college.ahuntsic.evaluation4.data
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import college.ahuntsic.evaluation4.model.Todo
 import college.ahuntsic.evaluation4.model.Priority
 import java.time.LocalDate
