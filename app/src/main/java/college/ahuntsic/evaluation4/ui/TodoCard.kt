@@ -38,7 +38,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import college.ahuntsic.evaluation4.R
@@ -98,22 +97,27 @@ fun TodoCard(
             ) {
                 Icon(
                     painter = painterResource(resIconId),
-                    contentDescription = "Priority Icon"
+                    contentDescription = "Priority Icon",
+                    modifier = Modifier.padding(end =  10.dp)
                 )
+
+                Text(text = todo.dateCreation.toString(), modifier = Modifier.weight(1f))
                 Checkbox(
                     checked = todo.completed,
                     onCheckedChange = { onCheck(!todo.completed) }
                 )
-                Text(text = todo.endDate.toString(), modifier = Modifier.weight(1f))
-                UnBouton(ouvert, { onExpand(todo) })
             }
             Spacer(Modifier.padding(5.dp))
-            Row {
-                Text(text = todo.name)
-                Spacer(Modifier.weight(1f))
+            Row (horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically)
+            {
+                Text(text = todo.name, modifier = Modifier.weight(1f))
+                UnBouton(ouvert, { onExpand(todo) })
             }
             if (ouvert) {
-                Spacer(Modifier.padding(10.dp))
+                Spacer(Modifier.padding(5.dp))
+                Text(text = todo.endDate.toString())
+                Spacer(Modifier.padding(5.dp))
                 Text(text = todo.note)
             }
         }
