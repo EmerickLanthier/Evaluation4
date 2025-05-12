@@ -16,15 +16,24 @@ fun MainNav(
     NavHost(
         navController = navController,
         startDestination = "accueil"
-    ){
-        composable ("accueil"){
+    ) {
+        composable("accueil") {
             EcranAccueil(
                 toSecondPage = {
-                    navController.navigate("secondPage"){
+                    navController.navigate("secondPage") {
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+        composable("secondPage") {
+            SecondPage(
+                toEcranAccueil = {
+                    navController.navigate("accueil") {
                         launchSingleTop = true
                     }
                 },
-                onBack = {navController.navigateUp()}
+                onBack = { navController.navigateUp() }
             )
         }
     }
