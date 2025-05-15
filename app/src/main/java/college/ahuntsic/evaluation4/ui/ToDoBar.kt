@@ -18,6 +18,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarColors
@@ -42,11 +43,13 @@ import college.ahuntsic.evaluation4.R
 fun ToDoBar(
     title: @Composable () -> Unit,
     navigationIcon: @Composable () -> Unit = {},
+    action: @Composable (RowScope.() -> Unit) = {},
     modifier: Modifier = Modifier,
 ) {
     CenterAlignedTopAppBar(
         title = title,
-        navigationIcon = navigationIcon
+        navigationIcon = navigationIcon,
+        actions = action
     )
     Column(
         modifier = Modifier

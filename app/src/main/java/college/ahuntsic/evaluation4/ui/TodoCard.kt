@@ -71,8 +71,7 @@ fun TodoCard(
     Card(
         modifier = modifier
             .padding(8.dp)
-            .fillMaxWidth()
-            .swipeToDismiss { onDelete(todo) },
+            .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 10.dp
         ),
@@ -123,7 +122,6 @@ fun TodoCard(
         }
     }
 }
-
 @Composable
 fun UnBouton(
     ouvert: Boolean,
@@ -141,63 +139,4 @@ fun UnBouton(
             tint = MaterialTheme.colorScheme.secondary
         )
     }
-}
-
-private fun Modifier.swipeToDismiss(
-    onDismissed: () -> Unit
-): Modifier = composed {
-    // This `Animatable` stores the horizontal offset for the element.
-    val offsetX = remember { Animatable(0f) }
-    pointerInput(Unit) {
-        // Used to calculate a settling position of a fling animation.
-        val decay = splineBasedDecay<Float>(this)
-        // Wrap in a coroutine scope to use suspend functions for touch events and animation.
-        coroutineScope {
-            while (true) {
-                // Wait for a touch down event.
-                val pointerId = awaitPointerEventScope { awaitFirstDown().id }
-                // Interrupt any ongoing animation.
-                offsetX.stop()
-                // Prepare for drag events and record velocity of a fling.
-                val velocityTracker = androidx.compose.ui.input.pointer.util.VelocityTracker()
-                // Wait for drag events.
-                awaitPointerEventScope {
-                    horizontalDrag(pointerId) { change ->
-                        // Record the position after offset
-                        val horizontalDragOffset = offsetX.value + change.positionChange().x
-                        launch {
-                            // Overwrite the `Animatable` value while the element is dragged.
-                            offsetX.snapTo(horizontalDragOffset)
-                        }
-                        // Record the velocity of the drag.
-                        velocityTracker.addPosition(change.uptimeMillis, change.position)
-                        // Consume the gesture event, not passed to external
-                        if (change.positionChange() != Offset.Zero) change.consume()
-                    }
-                }
-                // Dragging finished. Calculate the velocity of the fling.
-                val velocity = velocityTracker.calculateVelocity().x
-                // Calculate where the element eventually settles after the fling animation.
-                val targetOffsetX = decay.calculateTargetValue(offsetX.value, velocity)
-                // The animation should end as soon as it reaches these bounds.
-                offsetX.updateBounds(
-                    lowerBound = -size.width.toFloat(),
-                    upperBound = size.width.toFloat()
-                )
-                launch {
-                    if (targetOffsetX.absoluteValue <= size.width) {
-                        // Not enough velocity; Slide back to the default position.
-                        offsetX.animateTo(targetValue = 0f, initialVelocity = velocity)
-                    } else {
-                        // Enough velocity to slide away the element to the edge.
-                        offsetX.animateDecay(velocity, decay)
-                        // The element was swiped away.
-                        onDismissed()
-                    }
-                }
-            }
-        }
-    }
-        // Apply the horizontal offset to the element.
-        .offset { IntOffset(offsetX.value.roundToInt(), 0) }
 }

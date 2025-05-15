@@ -1,6 +1,9 @@
 package college.ahuntsic.evaluation4.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.time.LocalDate
+
 
 enum class Priority {
     HIGH,
@@ -8,8 +11,10 @@ enum class Priority {
     LOW
 }
 
+@Entity(tableName = "task")
 data class Todo (
-    val id : Int,
+    @PrimaryKey(autoGenerate = true)
+    val id : Int = 0,
     val dateCreation : LocalDate,
     val name: String,
     val note : String,
