@@ -28,31 +28,48 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import college.ahuntsic.evaluation4.model.Priority
+import college.ahuntsic.evaluation4.model.Todo
+import college.ahuntsic.evaluation4.model.TodoViewModel
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 
 @Composable
 fun SecondPage(
+    viewModel: TodoViewModel,
+    todo: Todo? = null, // For editing
     toEcranAccueil: () -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var name by remember { mutableStateOf(todo?.name ?: "") }
+    var note by remember { mutableStateOf(todo?.note ?: "") }
+    var priority by remember { mutableStateOf(todo?.priority ?: Priority.LOW) }
+    var endDate by remember {
+        mutableStateOf<Long?>(
+            todo?.endDate?.atStartOfDay(ZoneId.systemDefault())?.toInstant()?.toEpochMilli()
+        )
+    }
 
     Scaffold(
         topBar = {
             ToDoBar(
                 { Text("", maxLines = 1, overflow = TextOverflow.Ellipsis) }, {
-                IconButton(onClick = { onBack() }) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Back arrow"
-                    )
-                }
-            },
-                {
-                    IconButton(onClick = {  }) {
+                    IconButton(onClick = { onBack() }) {
                         Icon(
-                            imageVector = Icons.Filled.Delete,
-                            contentDescription = "Delete button"
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back arrow"
                         )
+                    }
+                },
+                {
+                    if (todo != null) {
+                        IconButton(onClick = { viewModel.deleteTodo(todo); toEcranAccueil() }) {
+                            Icon(
+                                imageVector = Icons.Filled.Delete,
+                                contentDescription = "Delete button"
+                            )
+                        }
                     }
                 }
             )
@@ -97,12 +114,38 @@ fun SecondPage(
                 Text(priority.toString())
                 MinimalDropdownMenu(priority, { priority = it })
             }
-            Button(onClick = { toEcranAccueil() }) {
-                Text(text = "Enregistrer")
+            Button(
+                onClick = {
+                    if (name.isNotBlank() && endDate != null) {
+                        val localDueDate = Instant.ofEpochMilli(endDate!!)
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate()
+                        val newTodo = Todo(
+                            id = todo?.id ?: 0,
+                            dateCreation = todo?.dateCreation ?: LocalDate.now(),
+                            name = name,
+                            note = note,
+                            priority = priority,
+                            completed = todo?.completed ?: false,
+                            endDate = localDueDate
+                        )
+                        if (todo != null) {
+                            viewModel.updateTodo(newTodo)
+                        } else {
+                            viewModel.insertTodo(newTodo)
+                        }
+                        toEcranAccueil()
+                    }
+                },
+                enabled = name.isNotBlank() && endDate != null
+            ) {
+                Text(text = if (todo != null) "Mettre à jour" else "Enregistrer")
             }
+
         }
     }
 }
+
 
 @Composable
 fun MinimalDropdownMenu(

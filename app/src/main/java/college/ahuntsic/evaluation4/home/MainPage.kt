@@ -17,35 +17,33 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import college.ahuntsic.evaluation4.data.Database
+import college.ahuntsic.evaluation4.model.Todo
+import college.ahuntsic.evaluation4.model.TodoViewModel
 import college.ahuntsic.evaluation4.ui.TodoList
 import college.ahuntsic.evaluation4.ui.ToDoBar
 
 @Composable
 fun EcranAccueil(
-    toSecondPage: () -> Unit,
+    viewModel: TodoViewModel,
+    toSecondPage: (Todo?) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = {
-            ToDoBar({ Text("", maxLines = 1, overflow = TextOverflow.Ellipsis) })
+            ToDoBar(
+                title = { Text("Todo List", maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            )
         },
-        modifier = Modifier.fillMaxSize()
+        floatingActionButton = {
+            FloatingActionButton(onClick = { toSecondPage(null) }) {
+                Icon(Icons.Default.Add, contentDescription = "Ajoutez")
+            }
+        },
+        modifier = modifier
     ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
-            val todoList = remember { Database.loadTodos().toMutableStateList() }
-            TodoList(todoList, modifier = modifier, { todo ->
-                val index = todoList.indexOf(todo)
-                todoList.removeAt(index)
-            }) { todo, checked ->
-                val index = todoList.indexOf(todo)
-                todoList[index] = todoList[index].copy(completed = checked)
-            }
-            Spacer(Modifier.weight(1f))
-            Row() {
-                FloatingActionButton(onClick = toSecondPage) {
-                    Icon(Icons.Filled.Add, "Floating action button")
-                }
-            }
-        }
+        TodoList(
+            viewModel = viewModel,
+            modifier = Modifier.padding(innerPadding)
+        )
     }
 }

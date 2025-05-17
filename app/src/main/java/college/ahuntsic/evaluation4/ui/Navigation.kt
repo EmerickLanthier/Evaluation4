@@ -8,9 +8,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import college.ahuntsic.evaluation4.home.EcranAccueil
+import college.ahuntsic.evaluation4.model.Todo
+import college.ahuntsic.evaluation4.model.TodoViewModel
 
 @Composable
 fun MainNav(
+    viewModel: TodoViewModel,
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(
@@ -19,20 +22,19 @@ fun MainNav(
     ) {
         composable("accueil") {
             EcranAccueil(
-                toSecondPage = {
-                    navController.navigate("secondPage") {
-                        launchSingleTop = true
-                    }
+                viewModel = viewModel,
+                toSecondPage = { todo ->
+                    navController.currentBackStackEntry?.savedStateHandle?.set("todo", todo)
+                    navController.navigate("secondPage")
                 }
             )
         }
         composable("secondPage") {
+            val todo = navController.previousBackStackEntry?.savedStateHandle?.get<Todo>("todo")
             SecondPage(
-                toEcranAccueil = {
-                    navController.navigate("accueil") {
-                        launchSingleTop = true
-                    }
-                },
+                viewModel = viewModel,
+                todo = todo,
+                toEcranAccueil = { navController.navigate("accueil") { popUpTo("accueil") { inclusive = false } } },
                 onBack = { navController.navigateUp() }
             )
         }

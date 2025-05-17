@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -13,28 +14,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import college.ahuntsic.evaluation4.model.Todo
+import college.ahuntsic.evaluation4.model.TodoViewModel
 
 @Composable
 fun TodoList(
-    todoList: List<Todo>,
-    modifier: Modifier,
-    onDelete: (todo:Todo)->Unit,
-    onTodoCheck: (todo: Todo, check: Boolean) -> Unit
+    viewModel: TodoViewModel,
+    modifier: Modifier = Modifier
 ) {
-    var expandedTodo by remember { mutableStateOf<String?>(null) }
+    var expandedTodoId by remember { mutableStateOf<Int?>(null) }
+    val todos by viewModel.allTodos.collectAsState()
+
     LazyColumn(modifier = modifier) {
-        items(todoList, key = {it.name}) {  todo ->
+        items(todos, key = { it.id }) { todo ->
             TodoCard(
-                todo,
-                expandedTodo == todo.name,
+                todo = todo,
+                ouvert = expandedTodoId == todo.id,
                 modifier = Modifier.padding(8.dp),
-                {onDelete(todo)},
-                { td ->
-                    expandedTodo = if (td.name == expandedTodo) null else td.name
-                }) {
-                    check ->
-                onTodoCheck(todo, check)
-            }
+                onDelete = { viewModel.deleteTodo(todo) },
+                onExpand = { expandedTodoId = if (expandedTodoId == todo.id) null else todo.id },
+                onCheck = { isChecked ->
+                    viewModel.updateTodo(todo.copy(completed = isChecked))
+                }
+            )
         }
     }
 }

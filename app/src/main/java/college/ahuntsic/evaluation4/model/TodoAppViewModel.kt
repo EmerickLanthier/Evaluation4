@@ -1,70 +1,38 @@
 package college.ahuntsic.evaluation4.model
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import college.ahuntsic.evaluation4.data.TodoRepository
-import java.time.LocalDate
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
-class TodoEntryViewModel(private val todoRepository: TodoRepository) : ViewModel() {
-    var todoUiState by mutableStateOf(TodoUiState())
-        private set
+class TodoViewModel(private val todoRepository: TodoRepository) : ViewModel() {
 
-    fun updateUiState(todoDetails: TodoDetails) {
-        todoUiState =
-            TodoUiState(todoDetails = todoDetails, isEntryValid = validateInput(todoDetails))
-    }
+    val allTodos: StateFlow<List<Todo>> = todoRepository.getAllTodoStream()
+        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    suspend fun saveItem() {
-        if (validateInput()) {
-            todoRepository.insertTodo(todoUiState.todoDetails.toTodo())
+    fun insertTodo(todo: Todo) {
+        viewModelScope.launch {
+            todoRepository.insertTodo(todo)
         }
     }
 
-    private fun validateInput(uiState: TodoDetails = todoUiState.todoDetails): Boolean {
-        return with(uiState) {
-            name.isNotBlank() && note.isNotBlank() && endDate.toString().isNotBlank()
+    fun updateTodo(todo: Todo) {
+        viewModelScope.launch {
+            todoRepository.updateTodo(todo)
         }
+    }
+
+    fun deleteTodo(todo: Todo) {
+        viewModelScope.launch {
+            todoRepository.deleteTodo(todo)
+        }
+    }
+
+    fun getTodo(id: Int): StateFlow<Todo?> {
+        return todoRepository.getTodoStream(id)
+            .stateIn(viewModelScope, SharingStarted.Lazily, null)
     }
 }
-
-data class TodoUiState(
-    val todoDetails: TodoDetails = TodoDetails(),
-    val isEntryValid: Boolean = false
-)
-
-data class TodoDetails(
-    val id: Int = 0,
-    val dateCreation: LocalDate = LocalDate.now(),
-    val name: String = "",
-    val note: String = "",
-    val priority: Priority = Priority.LOW,
-    val completed: Boolean = false,
-    val endDate: LocalDate = LocalDate.now()
-)
-
-fun TodoDetails.toTodo(): Todo = Todo(
-    id = id,
-    dateCreation = dateCreation,
-    name = name,
-    note = note,
-    priority = priority,
-    completed = completed,
-    endDate = endDate
-)
-
-fun Todo.toTodoUiState(isEntryValid: Boolean = false): TodoUiState = TodoUiState(
-    todoDetails = this.toTodoDetails(),
-    isEntryValid = isEntryValid
-)
-
-fun Todo.toTodoDetails(): TodoDetails = TodoDetails(
-    id = id,
-    dateCreation = dateCreation,
-    name = name,
-    note = note,
-    priority = priority,
-    completed = completed,
-    endDate = endDate
-)
