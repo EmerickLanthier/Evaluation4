@@ -15,12 +15,12 @@ enum class Priority {
 data class Todo (
     @PrimaryKey(autoGenerate = true)
     val id : Int = 0,
-    val dateCreation : LocalDate,
+    val dateCreation : String,
     val name: String,
     val note : String,
     val priority: Priority,
     val completed : Boolean,
-    val endDate : LocalDate
+    val endDate : String
 )
 
 

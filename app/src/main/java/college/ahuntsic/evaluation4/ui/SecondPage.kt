@@ -46,9 +46,10 @@ fun SecondPage(
     var note by remember { mutableStateOf(todo?.note ?: "") }
     var priority by remember { mutableStateOf(todo?.priority ?: Priority.LOW) }
     var endDate by remember {
-        mutableStateOf<Long?>(
+        mutableStateOf(todo?.endDate)
+       /* mutableStateOf<Long?>(
             todo?.endDate?.atStartOfDay(ZoneId.systemDefault())?.toInstant()?.toEpochMilli()
-        )
+        )*/
     }
 
     Scaffold(
@@ -117,17 +118,17 @@ fun SecondPage(
             Button(
                 onClick = {
                     if (name.isNotBlank() && endDate != null) {
-                        val localDueDate = Instant.ofEpochMilli(endDate!!)
+                       /* val localDueDate = Instant.ofEpochMilli(endDate!!)
                             .atZone(ZoneId.systemDefault())
-                            .toLocalDate()
+                            .toLocalDate()*/
                         val newTodo = Todo(
                             id = todo?.id ?: 0,
-                            dateCreation = todo?.dateCreation ?: LocalDate.now(),
+                            dateCreation = todo?.dateCreation ?: LocalDate.now().toString(),
                             name = name,
                             note = note,
                             priority = priority,
                             completed = todo?.completed ?: false,
-                            endDate = localDueDate
+                           endDate = ""
                         )
                         if (todo != null) {
                             viewModel.updateTodo(newTodo)
@@ -137,7 +138,7 @@ fun SecondPage(
                         toEcranAccueil()
                     }
                 },
-                enabled = name.isNotBlank() && endDate != null
+               /* enabled = name.isNotBlank() && endDate != null*/
             ) {
                 Text(text = if (todo != null) "Mettre à jour" else "Enregistrer")
             }
