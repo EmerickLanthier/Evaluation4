@@ -22,6 +22,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.stringResource
+import college.ahuntsic.evaluation4.R
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -37,7 +39,7 @@ fun DatePickerFieldToModal(
     OutlinedTextField(
         value = selectedDate?.let { formatDate(it) } ?: "",
         onValueChange = { },
-        label = {Text("Date de fin...")},
+        label = {Text(stringResource(R.string.date_de_fin))},
         placeholder = {Text("YYYY-MM-DD")},
         trailingIcon = {
             Icon(Icons.Default.DateRange, contentDescription = "Select Date")

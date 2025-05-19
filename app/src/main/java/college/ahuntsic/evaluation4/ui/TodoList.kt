@@ -19,7 +19,8 @@ import college.ahuntsic.evaluation4.model.TodoViewModel
 @Composable
 fun TodoList(
     viewModel: TodoViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    toSecondPage: (Todo?) -> Unit
 ) {
     var expandedTodoId by remember { mutableStateOf<Int?>(null) }
     val todos by viewModel.allTodos.collectAsState()
@@ -34,7 +35,9 @@ fun TodoList(
                 onExpand = { expandedTodoId = if (expandedTodoId == todo.id) null else todo.id },
                 onCheck = { isChecked ->
                     viewModel.updateTodo(todo.copy(completed = isChecked))
-                }
+                },
+                onEdit = { toSecondPage(todo) }
+
             )
         }
     }

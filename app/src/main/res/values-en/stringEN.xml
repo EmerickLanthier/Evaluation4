@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Evaluation4</string>
+    <string name="nom_de_la_tache">Task name</string>
+    <string name="ajouter_une_note">Add a note</string>
+    <string name="date_de_fin">End date...</string>
+    <string name="enregistrer">Save</string>
+    <string name="petite">Low</string>
+    <string name="moyenne">Medium</string>
+    <string name="grande">High</string>
+    <string name="mettre_jour">Update</string>
+</resources>

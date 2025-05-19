@@ -51,11 +51,13 @@ fun ToDoBar(
         navigationIcon = navigationIcon,
         actions = action
     )
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 30.dp)
     ) {
+
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,

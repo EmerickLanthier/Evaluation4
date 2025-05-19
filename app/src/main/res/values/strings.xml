@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Evaluation4</string>
+    <string name="nom_de_la_tache">Nom de la tache</string>
+    <string name="ajouter_une_note">Ajouter une note</string>
+    <string name="date_de_fin">Date de fin...</string>
+    <string name="enregistrer">Enregistrer</string>
+    <string name="petite">Petite</string>
+    <string name="moyenne">Moyenne</string>
+    <string name="grande">Grande</string>
+    <string name="mettre_jour">Mettre à jour</string>
 </resources>

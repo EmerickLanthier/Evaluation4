@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Card
@@ -55,7 +57,8 @@ fun TodoCard(
     modifier: Modifier = Modifier,
     onDelete: (todo: Todo) -> Unit,
     onExpand: (todo: Todo) -> Unit,
-    onCheck: (checked: Boolean) -> Unit
+    onCheck: (checked: Boolean) -> Unit,
+    onEdit: () -> Unit
 ) {
     val resIconId = when (todo.priority) {
         Priority.HIGH -> R.drawable.baseline_check_24
@@ -75,7 +78,7 @@ fun TodoCard(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 10.dp
         ),
-        shape = RoundedCornerShape(0.dp)
+        shape = RoundedCornerShape(topStart = 30.dp, bottomEnd = 30.dp),
     ) {
         Column(
             modifier = Modifier
@@ -97,14 +100,22 @@ fun TodoCard(
                 Icon(
                     painter = painterResource(resIconId),
                     contentDescription = "Priority Icon",
-                    modifier = Modifier.padding(end =  10.dp)
+                    modifier = Modifier.padding(end = 10.dp)
                 )
 
                 Text(text = todo.dateCreation.toString(), modifier = Modifier.weight(1f))
+
+                IconButton(onClick = { onEdit()}) {
+                    Icon(
+                        imageVector = Icons.Filled.Create,
+                        contentDescription = "Delete button"
+                    )
+                }
                 Checkbox(
                     checked = todo.completed,
                     onCheckedChange = { onCheck(!todo.completed) }
                 )
+
             }
             Spacer(Modifier.padding(5.dp))
             Row (horizontalArrangement = Arrangement.SpaceBetween,

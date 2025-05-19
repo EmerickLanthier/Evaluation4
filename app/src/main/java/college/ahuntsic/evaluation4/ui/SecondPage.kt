@@ -1,10 +1,13 @@
 package college.ahuntsic.evaluation4.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -19,14 +22,19 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import college.ahuntsic.evaluation4.R
 import college.ahuntsic.evaluation4.model.Priority
 import college.ahuntsic.evaluation4.model.Todo
 import college.ahuntsic.evaluation4.model.TodoViewModel
@@ -37,20 +45,11 @@ import java.time.ZoneId
 @Composable
 fun SecondPage(
     viewModel: TodoViewModel,
-    todo: Todo? = null, // For editing
+    todo: Todo? = null,
     toEcranAccueil: () -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var name by remember { mutableStateOf(todo?.name ?: "") }
-    var note by remember { mutableStateOf(todo?.note ?: "") }
-    var priority by remember { mutableStateOf(todo?.priority ?: Priority.LOW) }
-    var endDate by remember {
-        mutableStateOf(todo?.endDate)
-       /* mutableStateOf<Long?>(
-            todo?.endDate?.atStartOfDay(ZoneId.systemDefault())?.toInstant()?.toEpochMilli()
-        )*/
-    }
 
     Scaffold(
         topBar = {
@@ -77,6 +76,12 @@ fun SecondPage(
         },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
+        Image(
+            painter = painterResource(id = R.drawable.background),
+            contentDescription = "Demo background",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.fillMaxWidth().fillMaxHeight()
+        )
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -84,24 +89,37 @@ fun SecondPage(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            var selectedDate by remember { mutableStateOf<Long?>(null) }
             var nom by remember { mutableStateOf("") }
+            var note by remember { mutableStateOf("") }
+            var priority by remember { mutableStateOf(Priority.LOW) }
+            LaunchedEffect(todo) {
+                if (todo != null) {
+                    nom = todo.name
+                    note = todo.note
+                    priority = todo.priority
+                    selectedDate = LocalDate.parse(todo.endDate)
+                        .atStartOfDay(ZoneId.systemDefault())
+                        .toInstant()
+                        .toEpochMilli()
+                }
+            }
             OutlinedTextField(
                 value = nom,
                 onValueChange = { nom = it },
-                label = { Text("Nom de la tache") }
+                label = { Text(stringResource(R.string.nom_de_la_tache)) }
             )
-            var note by remember { mutableStateOf("") }
+
             OutlinedTextField(
                 value = note,
                 onValueChange = { note = it },
-                label = { Text("Ajouter une note") }
+                label = { Text(stringResource(R.string.ajouter_une_note)) }
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.padding(end = 65.dp, start = 65.dp)
             ) {
-                var selectedDate by remember { mutableStateOf<Long?>(null) }
                 DatePickerFieldToModal(selectedDate, onDateSelected = { selected ->
                     selectedDate = selected
                     selected
@@ -111,24 +129,26 @@ fun SecondPage(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                var priority by remember { mutableStateOf(Priority.LOW) }
                 Text(priority.toString())
                 MinimalDropdownMenu(priority, { priority = it })
             }
             Button(
                 onClick = {
-                    if (name.isNotBlank() && endDate != null) {
-                       /* val localDueDate = Instant.ofEpochMilli(endDate!!)
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate()*/
+                   if (nom.isNotBlank() && selectedDate != null) {
+                        val endDateStr = selectedDate?.let {
+                            Instant.ofEpochMilli(it)
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDate()
+                                .toString()
+                        } ?: ""
                         val newTodo = Todo(
                             id = todo?.id ?: 0,
                             dateCreation = todo?.dateCreation ?: LocalDate.now().toString(),
-                            name = name,
+                            name = nom,
                             note = note,
                             priority = priority,
                             completed = todo?.completed ?: false,
-                           endDate = ""
+                           endDate = endDateStr
                         )
                         if (todo != null) {
                             viewModel.updateTodo(newTodo)
@@ -138,9 +158,9 @@ fun SecondPage(
                         toEcranAccueil()
                     }
                 },
-               /* enabled = name.isNotBlank() && endDate != null*/
+               enabled = nom.isNotBlank() && selectedDate != null
             ) {
-                Text(text = if (todo != null) "Mettre à jour" else "Enregistrer")
+                Text(text = if (todo != null) stringResource(R.string.mettre_jour) else stringResource(R.string.enregistrer))
             }
 
         }
@@ -166,21 +186,21 @@ fun MinimalDropdownMenu(
             onDismissRequest = { expanded = false }
         ) {
             DropdownMenuItem(
-                text = { Text("Low") },
+                text = { Text(stringResource(R.string.petite)) },
                 onClick = {
                     onPrioritySelected(Priority.LOW)
                     expanded = false
                 }
             )
             DropdownMenuItem(
-                text = { Text("Medium") },
+                text = { Text(stringResource(R.string.moyenne)) },
                 onClick = {
                     onPrioritySelected(Priority.MEDIUM)
                     expanded = false
                 }
             )
             DropdownMenuItem(
-                text = { Text("Hight") },
+                text = { Text(stringResource(R.string.grande)) },
                 onClick = {
                     onPrioritySelected(Priority.HIGH)
                     expanded = false

@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val appContainer = AppDataContainer(this)
         setContent {
-            MaterialTheme {
+            Evaluation4Theme(darkTheme = true){
                 val viewModel: TodoViewModel = viewModel(
                     factory = object : androidx.lifecycle.ViewModelProvider.Factory {
                         override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
