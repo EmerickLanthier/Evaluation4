@@ -10,7 +10,9 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -39,8 +41,12 @@ fun DatePickerFieldToModal(
     OutlinedTextField(
         value = selectedDate?.let { formatDate(it) } ?: "",
         onValueChange = { },
-        label = {Text(stringResource(R.string.date_de_fin))},
-        placeholder = {Text("YYYY-MM-DD")},
+        label = {Text(stringResource(R.string.date_de_fin), color = MaterialTheme.colorScheme.tertiary)},
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedTextColor = MaterialTheme.colorScheme.tertiary,
+            unfocusedTextColor = MaterialTheme.colorScheme.tertiary
+        ),
+        placeholder = {Text(stringResource(R.string.aaaa_mm_jj), color = MaterialTheme.colorScheme.tertiary)},
         trailingIcon = {
             Icon(Icons.Default.DateRange, contentDescription = "Select Date")
         },

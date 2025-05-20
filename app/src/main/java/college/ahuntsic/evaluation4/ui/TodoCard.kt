@@ -58,7 +58,7 @@ fun TodoCard(
     onDelete: (todo: Todo) -> Unit,
     onExpand: (todo: Todo) -> Unit,
     onCheck: (checked: Boolean) -> Unit,
-    onEdit: () -> Unit
+    onEdit: (todo : Todo) -> Unit
 ) {
     val resIconId = when (todo.priority) {
         Priority.HIGH -> R.drawable.baseline_check_24
@@ -105,7 +105,7 @@ fun TodoCard(
 
                 Text(text = todo.dateCreation.toString(), modifier = Modifier.weight(1f))
 
-                IconButton(onClick = { onEdit()}) {
+                IconButton(onClick = { onEdit(todo)}) {
                     Icon(
                         imageVector = Icons.Filled.Create,
                         contentDescription = "Delete button"

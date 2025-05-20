@@ -32,18 +32,9 @@ import college.ahuntsic.evaluation4.ui.theme.Evaluation4Theme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val appContainer = AppDataContainer(this)
         setContent {
-            Evaluation4Theme(darkTheme = true){
-                val viewModel: TodoViewModel = viewModel(
-                    factory = object : androidx.lifecycle.ViewModelProvider.Factory {
-                        override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-                            @Suppress("UNCHECKED_CAST")
-                            return TodoViewModel(appContainer.todoRepository) as T
-                        }
-                    }
-                )
-                MainNav(viewModel = viewModel)
+            Evaluation4Theme{
+                MainNav()
             }
         }
     }

@@ -20,7 +20,7 @@ import college.ahuntsic.evaluation4.model.TodoViewModel
 fun TodoList(
     viewModel: TodoViewModel,
     modifier: Modifier = Modifier,
-    toSecondPage: (Todo?) -> Unit
+    toSecondPage: (todo : Todo) -> Unit
 ) {
     var expandedTodoId by remember { mutableStateOf<Int?>(null) }
     val todos by viewModel.allTodos.collectAsState()

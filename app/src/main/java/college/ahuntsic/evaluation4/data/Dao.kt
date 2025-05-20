@@ -21,8 +21,8 @@ interface TodoDao{
     suspend fun delete(task: Todo)
 
     @Query("SELECT * from task WHERE id = :id")
-    fun getTodo(id: Int): Flow<Todo>
+    fun getTodo(id: Int): Flow<Todo?>
 
-    @Query("SELECT * from task ORDER BY id ASC")
+    @Query("SELECT * from task ORDER BY endDate ASC")
     fun getAllTodo(): Flow<List<Todo>>
 }

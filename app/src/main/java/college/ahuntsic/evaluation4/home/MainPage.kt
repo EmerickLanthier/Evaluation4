@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.lifecycle.viewmodel.compose.viewModel
 import college.ahuntsic.evaluation4.data.Database
 import college.ahuntsic.evaluation4.model.Todo
 import college.ahuntsic.evaluation4.model.TodoViewModel
@@ -34,8 +35,9 @@ import college.ahuntsic.evaluation4.R
 
 @Composable
 fun EcranAccueil(
-    viewModel: TodoViewModel,
-    toSecondPage: (Todo?) -> Unit,
+    viewModel: TodoViewModel = viewModel(),
+    toSecondPage: () -> Unit,
+    toModifier : (todo : Todo) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -47,7 +49,7 @@ fun EcranAccueil(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { toSecondPage(null) },
+                onClick = { toSecondPage() },
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
@@ -66,7 +68,7 @@ fun EcranAccueil(
         TodoList(
             viewModel = viewModel,
             modifier = Modifier.padding(innerPadding),
-            toSecondPage = { todo -> toSecondPage(todo) }
+            toSecondPage = { todo -> toModifier(todo) }
 
         )
     }
