@@ -142,7 +142,6 @@ fun SecondPage(
                 }
             }
 
-// Préremplir les champs une fois le todo chargé
             LaunchedEffect(todo) {
                 if (todo != null) {
                     nom = todo!!.name

@@ -58,12 +58,12 @@ fun TodoCard(
     onDelete: (todo: Todo) -> Unit,
     onExpand: (todo: Todo) -> Unit,
     onCheck: (checked: Boolean) -> Unit,
-    onEdit: (todo : Todo) -> Unit
+    onEdit: (todo: Todo) -> Unit
 ) {
     val resIconId = when (todo.priority) {
         Priority.HIGH -> R.drawable.baseline_check_24
         Priority.MEDIUM -> R.drawable.baseline_check_circle_outline_24
-        else-> R.drawable.baseline_check_circle_24
+        else -> R.drawable.baseline_check_circle_24
     }
 
     val backgroundColor by animateColorAsState(
@@ -105,7 +105,7 @@ fun TodoCard(
 
                 Text(text = todo.dateCreation.toString(), modifier = Modifier.weight(1f))
 
-                IconButton(onClick = { onEdit(todo)}) {
+                IconButton(onClick = { onEdit(todo) }) {
                     Icon(
                         imageVector = Icons.Filled.Create,
                         contentDescription = "Delete button"
@@ -118,8 +118,10 @@ fun TodoCard(
 
             }
             Spacer(Modifier.padding(5.dp))
-            Row (horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically)
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            )
             {
                 Text(text = todo.name, modifier = Modifier.weight(1f))
                 UnBouton(ouvert, { onExpand(todo) })
@@ -133,6 +135,7 @@ fun TodoCard(
         }
     }
 }
+
 @Composable
 fun UnBouton(
     ouvert: Boolean,

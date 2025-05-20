@@ -41,12 +41,22 @@ fun DatePickerFieldToModal(
     OutlinedTextField(
         value = selectedDate?.let { formatDate(it) } ?: "",
         onValueChange = { },
-        label = {Text(stringResource(R.string.date_de_fin), color = MaterialTheme.colorScheme.tertiary)},
+        label = {
+            Text(
+                stringResource(R.string.date_de_fin),
+                color = MaterialTheme.colorScheme.tertiary
+            )
+        },
         colors = OutlinedTextFieldDefaults.colors(
             focusedTextColor = MaterialTheme.colorScheme.tertiary,
             unfocusedTextColor = MaterialTheme.colorScheme.tertiary
         ),
-        placeholder = {Text(stringResource(R.string.aaaa_mm_jj), color = MaterialTheme.colorScheme.tertiary)},
+        placeholder = {
+            Text(
+                stringResource(R.string.aaaa_mm_jj),
+                color = MaterialTheme.colorScheme.tertiary
+            )
+        },
         trailingIcon = {
             Icon(Icons.Default.DateRange, contentDescription = "Select Date")
         },
@@ -70,10 +80,12 @@ fun DatePickerFieldToModal(
         )
     }
 }
+
 fun formatDate(api: Long): String {
     val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     return formatter.format(Date(api))
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerModal(

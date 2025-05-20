@@ -28,25 +28,28 @@ fun MainNav(
                 toSecondPage = {
                     navController.navigate("secondPage")
                 },
-                toModifier = {todo -> navController.navigate(route = "secondPage/${todo.id}") {
-                    launchSingleTop = true
-                } }
+                toModifier = { todo ->
+                    navController.navigate(route = "secondPage/${todo.id}") {
+                        launchSingleTop = true
+                    }
+                }
             )
         }
-        composable("secondPage/{idTodo}",
-            arguments = listOf(navArgument("idTodo") { type = NavType.IntType })) {
-            backStackEntry ->
+        composable(
+            "secondPage/{idTodo}",
+            arguments = listOf(navArgument("idTodo") { type = NavType.IntType })
+        ) { backStackEntry ->
             val idTodo = backStackEntry.arguments?.getInt("idTodo") ?: -1
             SecondPage(
                 idTodo = idTodo,
-                toEcranAccueil = { navController.navigate("accueil") {launchSingleTop = true}},
+                toEcranAccueil = { navController.navigate("accueil") { launchSingleTop = true } },
                 onBack = { navController.navigateUp() }
             )
         }
         composable("secondPage") {
             SecondPage(
                 idTodo = -1,
-                toEcranAccueil = { navController.navigate("accueil") {launchSingleTop = true}},
+                toEcranAccueil = { navController.navigate("accueil") { launchSingleTop = true } },
                 onBack = { navController.navigateUp() }
             )
         }

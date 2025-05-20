@@ -26,7 +26,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.viewmodel.compose.viewModel
-import college.ahuntsic.evaluation4.data.Database
 import college.ahuntsic.evaluation4.model.Todo
 import college.ahuntsic.evaluation4.model.TodoViewModel
 import college.ahuntsic.evaluation4.ui.TodoList
@@ -37,7 +36,7 @@ import college.ahuntsic.evaluation4.R
 fun EcranAccueil(
     viewModel: TodoViewModel = viewModel(),
     toSecondPage: () -> Unit,
-    toModifier : (todo : Todo) -> Unit,
+    toModifier: (todo: Todo) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -62,7 +61,9 @@ fun EcranAccueil(
             painter = painterResource(id = R.drawable.background),
             contentDescription = "Demo background",
             contentScale = ContentScale.FillBounds,
-            modifier = Modifier.fillMaxWidth().fillMaxHeight()
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
         )
 
         TodoList(

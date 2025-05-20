@@ -10,9 +10,9 @@ import androidx.room.Update
 import college.ahuntsic.evaluation4.model.Todo
 
 @Dao
-interface TodoDao{
+interface TodoDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(task:Todo)
+    suspend fun insert(task: Todo)
 
     @Update
     suspend fun update(task: Todo)

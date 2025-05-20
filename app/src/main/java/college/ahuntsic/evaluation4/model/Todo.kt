@@ -12,15 +12,15 @@ enum class Priority {
 }
 
 @Entity(tableName = "task")
-data class Todo (
+data class Todo(
     @PrimaryKey(autoGenerate = true)
-    val id : Int = 0,
-    val dateCreation : String,
+    val id: Int = 0,
+    val dateCreation: String,
     val name: String,
-    val note : String,
+    val note: String,
     val priority: Priority,
-    val completed : Boolean,
-    val endDate : String
+    val completed: Boolean,
+    val endDate: String
 )
 
 
