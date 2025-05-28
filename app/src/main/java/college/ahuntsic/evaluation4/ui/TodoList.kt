@@ -23,7 +23,7 @@ fun TodoList(
     toSecondPage: (todo: Todo) -> Unit
 ) {
     var expandedTodoId by remember { mutableStateOf<Int?>(null) }
-    val todos by viewModel.allTodos.collectAsState()
+    val todos by viewModel.filteredTodos.collectAsState()
 
     LazyColumn(modifier = modifier) {
         items(todos, key = { it.id }) { todo ->

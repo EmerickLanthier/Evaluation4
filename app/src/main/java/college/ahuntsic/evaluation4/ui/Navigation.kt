@@ -16,7 +16,6 @@ import college.ahuntsic.evaluation4.model.TodoViewModel
 
 @Composable
 fun MainNav(
-    viewModel: TodoViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(

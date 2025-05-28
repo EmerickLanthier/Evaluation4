@@ -245,7 +245,7 @@ fun SecondPage(
                             name = nom,
                             note = note,
                             priority = priority,
-                            completed = todo?.completed ?: false,
+                            completed = todo?.completed == true,
                             endDate = endDateStr
                         )
                         if (todo != null) {
